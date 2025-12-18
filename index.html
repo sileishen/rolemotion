@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="RoleMotion: A Large-Scale Dataset towards Robust Scene-Specific Role-Playing Motion Synthesis with Fine-grained Descriptions">
+  <meta name="keywords" content="motion">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoleMotion: A Large-Scale Dataset towards Robust Scene-Specific Role-Playing Motion Synthesis with Fine-grained Descriptions</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <style>
+  /* 统计数据栏样式 */
+    .stat-section {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #e5e5e5; /* 竖线分隔符 */
+    }
+
+    /* 最后一个元素去掉右边框 */
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      color: #3273dc; /* 主题蓝 */
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #363636;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #7a7a7a;
+    }
+
+    /* 移动端适配：手机上取消竖线，改为下边距 */
+    @media screen and (max-width: 768px) {
+      .stat-item {
+        border-right: none;
+        margin-bottom: 20px;
+      }
+    }
+
+  /* 数据采集策划部分的样式 */
+    .planning-container {
+      margin-top: 20px;
+    }
+
+    .hierarchy-label {
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: block;
+      font-weight: bold;
+    }
+
+    .scene-tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .scene-tag {
+      padding: 8px 15px;
+      background-color: #f5f5f5;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      font-weight: 600;
+      color: #4a4a4a;
+    }
+
+    .scene-tag.is-active {
+      background-color: #3273dc;
+      color: white;
+      border-color: #3273dc;
+    }
+
+    /* 层级卡片样式 */
+    .role-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      height: 100%;
+      border-top: 4px solid #3273dc; /* 蓝色顶边 */
+    }
+
+    .doctor-card {
+      border-top-color: #00d1b2; /* 绿色顶边区分医生 */
+    }
+
+    .behavior-list {
+      margin-left: 20px;
+      list-style-type: disc;
+      margin-bottom: 15px;
+    }
+
+    .behavior-item {
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .desc-box {
+      background-color: #f9f9f9;
+      border-left: 3px solid #3273dc;
+      padding: 10px 15px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #555;
+    }
+
+    .desc-label {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #3273dc;
+      font-style: normal;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .arrow-down {
+      text-align: center;
+      font-size: 20px;
+      color: #ccc;
+      margin: 10px 0;
+    }
+    /* 轮播容器内容填满所在的列 */
+    .carousel-content-wrapper {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* 调整文字大小，因为并排显示空间小，文字不能太大 */
+    .carousel-caption {
+      font-size: 0.9rem;
+      font-weight: bold;
+      min-height: 3.5em; /* 预留高度，防止文字换行导致抖动 */
+      margin-bottom: 5px;
+      padding: 0 5px;    /* 防止文字贴边 */
+    }
+
+    /* 给每一列加点间距和边框，看起来更像独立的卡片 */
+    .scene-column {
+      padding: 10px;
+      border-radius: 8px;
+      /* border: 1px solid #eee;  如果不想要边框可以去掉这行 */
+    }
+
+    /* 调整标题 */
+    .scene-title {
+      margin-bottom: 15px !important;
+      font-size: 1.2rem !important;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+
+</nav>
+
+<!-- author -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">RoleMotion: A Large-Scale Dataset towards Robust Scene-Specific Role-Playing Motion Synthesis with Fine-grained Descriptions</h1>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">
+              <a>Junran Peng</a><sup>1,3,5*</sup>,</span>
+            <span class="author-block">
+              <a>Yiheng Huang</a><sup>2,5*</sup>,</span>
+            <span class="author-block">
+              <a>Silei Shen</a><sup>1,5*</sup>,
+            </span>
+            <span class="author-block">
+              <a>Zeji Wei</a><sup>1,5</sup>,
+            </span>
+            <span class="author-block">
+              <a>Jingwei Yang</a><sup>7</sup>,
+            </span>
+            <span class="author-block">
+              <a>Baojie Wang</a><sup>1</sup>,
+            </span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">
+              <a>Yonghao He</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a>Wei Sui</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a>Chuanchen Luo</a><sup>5,6</sup>,
+            </span>
+            
+            <span class="author-block">
+              <a>Man Zhang</a><sup>2</sup>,
+            </span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">
+              <a>Xucheng Yin</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a>Xu-Cheng Yin</a><sup>1</sup>,
+            </span>
+            <p>
+              <sup>∗</sup>: Equal contribution.
+              <sup>↑</sup>: Project leader.
+              <sup>✉</sup>: Corresponding author.
+            </p>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Science and Technology Beijing,</span>
+            <span class="author-block"><sup>2</sup>Beijing University of Posts and Telecommunications，</span>
+            <span class="author-block"><sup>3</sup>Shunde Innovation School, University of Science and Technology Beijing，</span>
+            <span class="author-block"><sup>4</sup>D-Robotics，</span>
+            <span class="author-block"><sup>5</sup>Linketic，</span>
+            <span class="author-block"><sup>6</sup>Shandong University，</span>
+            <span class="author-block"><sup>7</sup>China University of Mining And Technology</span>
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Paper Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2512.01582"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- arxiv Link. -->
+              <span class="link-block">
+                <a  href="https://arxiv.org/abs/2512.01582"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code(Coming Soon)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data(Coming Soon)</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract. -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered">
+
+      <div class="column is-four-fifths">
+        <div class="box">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this paper, we introduce bf RoleMotion, a large-scale human motion dataset that encompasses a wealth of role-playing and functional motion data tailored to fit various specific scenes.
+            Existing text datasets are mainly constructed decentrally as amalgamation of assorted subsets that their data are nonfunctional and isolated to work together to cover social activities in various scenes.
+            Also, the quality of motion data is inconsistent, and textual annotation lacks fine-grained details in these datasets.
+            In contrast, RoleMotion is meticulously designed and collected with a particular focus on scenes and roles.
+            The dataset features 25 classic scenes, 110 functional roles, over 500 behaviors, and 10296 high-quality human motion sequences of body and hands, annotated with 27831 fine-grained text descriptions.
+            We build an evaluator stronger than existing counterparts, prove its reliability, and evaluate various text-to-motion methods on our dataset.
+            Finally, we explore the interplay of motion generation of body and hands. Experimental results demonstrate the high-quality and functionality of our dataset on text-driven whole-body generation.
+            The dataset and related codes will be fully released.
+          </p>
+        </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Data Collection Planning Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered" style="margin-bottom: 0;">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Data Collection Planning</h2>
+
+        <div class="content has-text-justified" style="margin-bottom: 0;">
+          <p>
+            To ensure the diversity and functionality of RoleMotion, we conducted a hierarchical data collection planning covering:
+          </p>
+
+          <div class="has-text-centered" style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            <span class="is-size-4 has-text-weight-bold">Scene</span>
+            <span style="margin: 0 10px; color: #3273dc; font-size: 1.2rem;">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+            <span class="is-size-4 has-text-weight-bold">Role</span>
+            <span style="margin: 0 10px; color: #3273dc; font-size: 1.2rem;">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+            <span class="is-size-4 has-text-weight-bold">Behavior</span>
+            <span style="margin: 0 10px; color: #3273dc; font-size: 1.2rem;">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+            <span class="is-size-4 has-text-weight-bold">Fine-grained Description</span>
+          </div>
+
+          <!-- 2. 连接元素 (Visual Connector) -->
+          <div class="container is-max-desktop">
+            <div class="columns is-centered is-mobile" style="margin-bottom: -15px; margin-top: 5px;">
+              <div class="column is-3 has-text-centered flow-connector">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="column is-3 has-text-centered flow-connector">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="column is-3 has-text-centered flow-connector">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="column is-3 has-text-centered flow-connector">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. 统计数据看板 (Statistical Result) -->
+          <div class="container is-max-desktop stats-dashboard">
+            <div class="columns is-mobile is-multiline is-centered">
+              <div class="column is-3-desktop is-6-mobile stat-col">
+                <div class="stat-icon-circle"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="stat-num">25</div>
+                <div class="stat-name">Typical Scenes</div>
+              </div>
+              <div class="column is-3-desktop is-6-mobile stat-col">
+                <div class="stat-icon-circle"><i class="fas fa-users"></i></div>
+                <div class="stat-num">100+</div>
+                <div class="stat-name">Functional Roles</div>
+              </div>
+              <div class="column is-3-desktop is-6-mobile stat-col">
+                <div class="stat-icon-circle"><i class="fas fa-running"></i></div>
+                <div class="stat-num">500+</div>
+                <div class="stat-name">Action Classes</div>
+              </div>
+              <div class="column is-3-desktop is-6-mobile stat-col">
+                <div class="stat-icon-circle"><i class="fas fa-file-alt"></i></div>
+                <div class="stat-num">10k+</div>
+                <div class="stat-name">Fine Descriptions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- title & stats section end -->
+
+
+    <!-- LEVEL 1: SCENES -->
+    <div class="planning-container has-text-centered" style="margin-top: 20px;margin-bottom: 0;">
+      <span class="hierarchy-label" >Step 1: Diverse Scenes Coverage</span>
+      <div class="scene-tag-container" style="margin-top: 0px;margin-bottom: 0px;">
+        <span class="scene-tag">Restaurant</span>
+        <span class="scene-tag">Concert</span>
+        <span class="scene-tag is-active">Hospital</span>
+        <span class="scene-tag">School</span>
+        <span class="scene-tag">Market</span>
+      </div>
+      <p class="is-size-7 has-text-grey" style="margin-top: 0px;margin-bottom: 20px;">
+        *Highlighting the <strong>Hospital</strong> scene as a detailed example below.
+      </p>
+    </div>
+    <!-- LEVEL 1: SCENES END-->
+
+    <!-- LEVEL 2, 3, 4: HIERARCHY EXAMPLE (Hospital) -->
+    <div class="box has-background-light">
+      <h3 class="title is-4 has-text-centered">Case Study: The "Hospital" Scene</h3>
+      <!-- Other Roles in Hospital -->
+      <div class="has-text-centered mb-5">
+        <span class="tag is-white">Other Roles:</span>
+        <span class="tag is-white">Family Member</span>
+        <span class="tag is-white">Nurse</span>
+        <span class="tag is-white">Pharmacist</span>
+        <span class="tag is-white">Radiologist</span>
+        <span class="tag is-white">Surgeon</span>
+      </div>
+      <!-- Other Roles in Hospital END -->
+
+      <!-- ROLE ACTION -->
+      <div class="columns is-variable is-4">
+        <!-- COLUMN 1: Outpatient (Patient) -->
+        <div class="column is-6">
+          <div class="role-card">
+            <h4 class="title is-5"><i class="fas fa-user-injured"></i> Role: Patient</h4>
+            <span class="hierarchy-label">Step 2: Define Behaviors</span>
+            <ul class="behavior-list">
+              <li class="behavior-item">Take medicine</li>
+              <li class="behavior-item">Queue</li>
+              <li class="behavior-item" style="color: #3273dc; font-weight: bold;">
+                Consultation
+              </li>
+            </ul>
+            <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+
+            <span class="hierarchy-label">Step 3: Fine-grained Descriptions</span>
+            <!-- Description 1 -->
+            <div class="desc-box">
+              <span class="desc-label">Description 1:</span>
+              “Sit down and swipe your phone with your right hand.then look up to your left.”
+            </div>
+            <!-- Description 2 -->
+            <div class="desc-box">
+              <span class="desc-label">Description 2:</span>
+              “Standing, holding the lD in both hands, on tiptoe look at the line in front of you, then from the left te the line in front, then from the right.”
+            </div>
+          </div>
+        </div>
+        <!-- COLUMN 1: Outpatient (Patient) END -->
+
+
+        <!-- COLUMN 2: Physician (Internal Medicine) -->
+        <div class="column is-6">
+          <div class="role-card doctor-card">
+            <h4 class="title is-5"><i class="fas fa-user-md"></i> Role: Pharmacist</h4>
+            <span class="hierarchy-label">Step 2: Define Behaviors</span>
+            <ul class="behavior-list">
+              <li class="behavior-item">Record condition</li>
+              <li class="behavior-item" style="color: #00d1b2; font-weight: bold;">
+                Body check
+              </li>
+              <li class="behavior-item" style="color: #00d1b2; font-weight: bold;">
+                Ask about condition
+              </li>
+              <li class="behavior-item">Treating the wounds</li>
+            </ul>
+
+           <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+            <span class="hierarchy-label">Step 3: Fine-grained Descriptions</span>
+            <!-- 描述 1: 对应身体检查 (X光片) -->
+            <div class="desc-box" style="border-left-color: #00d1b2;">
+              <span class="desc-label" style="color: #00d1b2;">Description (Body check) </span>
+              “While sitting, pick up the X-ray with both hands and slide the fingers of your right hand over the X-ray.”
+            </div>
+
+            <!-- 描述 2: 对应交流病情 (听诊器) -->
+            <div class="desc-box" style="border-left-color: #00d1b2;">
+              <span class="desc-label" style="color: #00d1b2;">Description (Ask about condition)</span>
+              “Sitting, pick up the stethoscope with both hands,place it in your ear, and then piek up the head with your right hand.”
+            </div>
+          </div>
+        </div>
+        <!-- COLUMN 2: Physician (Internal Medicine) END-->
+      </div>
+      <!-- ROLE ACTION END -->
+              <!-- Notification  -->
+      <div class="notification is-white is-size-7 mt-5 has-text-centered">
+        <i class="fas fa-info-circle" style="color: #3273dc;"></i>
+        <span style="margin-left: 5px;">
+          <strong>Insight:</strong> Specific professional gestures and subtle hand interactions are captured for each action across all scenes to ensure realism and diversity.
+        </span>
+      </div>
+    </div>
+    <!-- LEVEL 2, 3, 4: HIERARCHY EXAMPLE (Hospital) END-->
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <!-- title -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Data Visualization</h2>
+        <div class="content has-text-justified">
+          <p>
+           Below are ground-truth motion captures from RoleMotion.
+          </p>
+        </div>
+      </div>
+    </div>
+
+      <div class="columns is-centered is-desktop">
+        <!-- ================= 第1列: Office ================= -->
+        <div class="column is-3 scene-column">
+          <h3 class="title scene-title has-text-centered">Office</h3>
+          <div class="carousel results-carousel">
+            <!-- Office Video 1 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                 <p class="carousel-caption">“Bends down to pick something up.”</p>
+                 <video poster="" autoplay controls muted loop playsinline width="100%">
+                   <source src="./static/videos/office1.mp4" type="video/mp4">
+                 </video>
+              </div>
+            </div>
+            <!-- Office Video 2 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Paces back and forth.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/office2.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Office Video 3 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Martial arts punch.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/office3.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 第2列: Kitchen ================= -->
+        <div class="column is-3 scene-column">
+          <h3 class="title scene-title has-text-centered">Kitchen</h3>
+          <div class="carousel results-carousel">
+            <!-- Chef Video 1 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                 <p class="carousel-caption">“Chopping vegetables.”</p>
+                 <video poster="" autoplay controls muted loop playsinline width="100%">
+                   <source src="./static/videos/Chef1.mp4" type="video/mp4">
+                 </video>
+              </div>
+            </div>
+            <!-- Chef Video 2 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Stirring the soup.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/Chef2.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Chef Video 3 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Serving the dish.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/Chef3.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 第3列: Doctor ================= -->
+        <div class="column is-3 scene-column">
+          <h3 class="title scene-title has-text-centered">Medical</h3>
+          <div class="carousel results-carousel">
+            <!-- Doctor Video 1 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Examining X-ray results.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/doctor1.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Doctor Video 2 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Writing a prescription.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/doctor2.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Doctor Video 3 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Explaining diagnosis.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/doctor3.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 第4列: Customer ================= -->
+        <div class="column is-3 scene-column">
+          <h3 class="title scene-title has-text-centered">Customer</h3>
+          <div class="carousel results-carousel">
+            <!-- Customer Video 1 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Looking around shelf.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/customer1.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Customer Video 2 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Paying by credit card.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/customer2.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <!-- Customer Video 3 -->
+            <div class="item">
+              <div class="has-text-centered carousel-content-wrapper">
+                <p class="carousel-caption">“Asking staff questions.”</p>
+                <video poster="" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/customer3.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End Columns -->
+    </div>
+  </div>
+</section>
+
+<!-- Real-Robot Deployment Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Real-Robot Deployment on Unitree H1</h2>
+        <div class="content has-text-justified">
+          <p>
+            We also deployed the motions on the <strong>Unitree H1</strong> humanoid robot.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel results-carousel">
+
+      <!-- Video 1 -->
+      <div class="item item-robot1">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 1 ”</p>
+          <video poster="" id="robot1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/beer.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="item item-robot2">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 2”</p>
+          <video poster="" id="robot2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/boxer.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="item item-robot3">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 3”</p>
+          <video poster="" id="robot3" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/boxxer.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="item item-robot4">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 4”</p>
+          <video poster="" id="robot4" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mujiang.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="item item-robot5">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 5”</p>
+          <video poster="" id="robot5" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/photographer.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="item item-robot6">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 6”</p>
+          <video poster="" id="robot6" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/robot/robot6.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 7 -->
+      <div class="item item-robot7">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 7”</p>
+          <video poster="" id="robot7" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/point.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 8 -->
+      <div class="item item-robot8">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 8”</p>
+          <video poster="" id="robot8" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/ticao.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Video 9 -->
+      <div class="item item-robot9">
+        <div class="has-text-centered">
+          <p class="carousel-caption">“Demo 9”</p>
+          <video poster="" id="robot9" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/zhihui.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dataset Statistics & Comparison -->
+<section class="section" id="dataset-comparison">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Dataset Statistics &amp; Comparison</h2>
+        <div class="content has-text-justified">
+          <p>
+            Comparisons between <strong>RoleMotion</strong> and existing text–motion datasets.
+            <strong>B</strong>, <strong>H</strong>, <strong>F</strong> denote <strong>B</strong>ody,
+            <strong>H</strong>and and <strong>F</strong>ace.
+            <strong>A</strong> and <strong>C</strong> indicate whether the dataset is an
+            <strong>A</strong>ggregation of existing motion datasets or
+            <strong>C</strong>ollected from scratch.
+            <strong>GT</strong> means that motion annotations come from ground-truth motion capture,
+            while pseudo labels are predicted by models.
+          </p>
+
+          <div class="table-container">
+            <table class="table is-striped is-bordered is-fullwidth is-size-7">
+              <thead>
+                <tr>
+                  <th>Dataset</th>
+                  <th>Clips</th>
+                  <th>Text Annotations</th>
+                  <th>Motion Annotations</th>
+                  <th>Source</th>
+                  <th>Annotation Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>KIT-ML</td>
+                  <td>3,911</td>
+                  <td>6,278</td>
+                  <td>B</td>
+                  <td>A</td>
+                  <td>GT</td>
+                </tr>
+                <tr>
+                  <td>AMASS</td>
+                  <td>11,265</td>
+                  <td>–</td>
+                  <td>B</td>
+                  <td>A</td>
+                  <td>GT</td>
+                </tr>
+                <tr>
+                  <td>BABEL</td>
+                  <td>13,220</td>
+                  <td>91,408</td>
+                  <td>B</td>
+                  <td>A</td>
+                  <td>GT</td>
+                </tr>
+                <tr>
+                  <td>HumanML3D</td>
+                  <td>14,616</td>
+                  <td>44,970</td>
+                  <td>B</td>
+                  <td>A</td>
+                  <td>GT</td>
+                </tr>
+                <tr>
+                  <td>MotionX</td>
+                  <td>81,084</td>
+                  <td>81,084</td>
+                  <td>B, H, F</td>
+                  <td>A</td>
+                  <td>Pseudo label</td>
+                </tr>
+                <tr>
+                  <td><strong>RoleMotion (Ours)</strong></td>
+                  <td><strong>10,296</strong></td>
+                  <td><strong>27,831</strong></td>
+                  <td><strong>B, H</strong></td>
+                  <td><strong>C</strong></td>
+                  <td><strong>GT</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Text–Motion Alignment Analysis on HumanML3D vs RoleMotion -->
+<section class="section" id="alignment-analysis">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+
+        <h2 class="title is-3 has-text-centered">
+          Text–Motion Alignment: HumanML3D vs RoleMotion
+        </h2>
+
+        <div class="content has-text-justified">
+
+          <p>
+            Beyond the dataset statistics, we further examine the
+            <strong>matching quality between text and motion</strong> on
+            HumanML3D and RoleMotion. To do so, we build a stronger
+            <em>text–motion evaluator</em> than the widely-used
+            Text2Motion-style critic, and train it on RoleMotion.
+            Under this unified evaluator, RoleMotion consistently shows
+            tighter alignment between descriptions and motions than
+            HumanML3D, both quantitatively and qualitatively.
+          </p>
+
+          <!-- ========= Qualitative Figure (Fig.3) ========= -->
+          <!-- 请先把论文里的 Fig.3 导出成一张图片，比如 static/images/hml3d_rolemotion_qualitative.png -->
+          <figure class="image">
+            <img src="static/images/fine_grained_v2_01.png"
+                 alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
+          </figure>
+          <p class="is-size-7 has-text-grey">
+            <strong>Figure.</strong> Qualitative results of models trained on
+            <strong>HumanML3D</strong> (top row in each block) and
+            <strong>RoleMotion</strong> (bottom row).
+            All models are trained with the same architecture but on
+            different datasets.
+            Compared to HumanML3D, RoleMotion provides high-quality motions
+            with <em>fine-grained textual annotations</em>, where body state,
+            side of part and direction are explicitly specified.
+            Almost all action details in the text are faithfully completed
+            by the model trained on RoleMotion (except for a rare failure
+            case), while motions trained on HumanML3D often look unnatural
+            and contain mistakes in details such as which hand moves, which
+            direction to look at or whether to sit or stand.
+          </p>
+
+          <hr>
+
+          <!-- ========= Quantitative Table (Table 3) ========= -->
+          <h3 class="title is-5 has-text-centered">
+            Quantitative Alignment under a Unified Evaluator
+          </h3>
+
+          <p>
+            We also compare HumanML3D and RoleMotion under the same evaluator
+            using <em>R-Precision</em> and Diversity.
+            Higher R-Precision means the evaluator can correctly retrieve the
+            ground-truth motion from a set of candidates given a text query.
+            As shown below, both our evaluator and the original Text2Motion
+            critic obtain substantially higher R-Precision on RoleMotion than
+            on HumanML3D, indicating that <strong>motions and texts in
+            RoleMotion are much more tightly aligned</strong>.
+          </p>
+
+          <div class="table-container">
+            <table class="table is-striped is-bordered is-fullwidth is-size-7">
+              <thead>
+                <tr>
+                  <th>Evaluator</th>
+                  <th>Dataset</th>
+                  <th>R-Precision (Top1)</th>
+                  <th>R-Precision (Top2)</th>
+                  <th>R-Precision (Top3)</th>
+                  <th>Diversity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ours</td>
+                  <td>HumanML3D</td>
+                  <td>0.505</td>
+                  <td>0.645</td>
+                  <td>0.711</td>
+                  <td>15.050</td>
+                </tr>
+                <tr>
+                  <td>Ours</td>
+                  <td><strong>RoleMotion</strong></td>
+                  <td><strong>0.939</strong></td>
+                  <td><strong>0.978</strong></td>
+                  <td><strong>0.987</strong></td>
+                  <td>19.121</td>
+                </tr>
+                <tr>
+                  <td>Text2Motion critic</td>
+                  <td>HumanML3D</td>
+                  <td>0.511</td>
+                  <td>0.703</td>
+                  <td>0.797</td>
+                  <td>9.503</td>
+                </tr>
+                <tr>
+                  <td>Text2Motion critic</td>
+                  <td><strong>RoleMotion</strong></td>
+                  <td><strong>0.820</strong></td>
+                  <td><strong>0.931</strong></td>
+                  <td><strong>0.964</strong></td>
+                  <td>14.605</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="is-size-7 has-text-grey has-text-centered">
+            Higher R-Precisions are achieved on RoleMotion by both our
+            evaluator and the original Text2Motion critic,
+            demonstrating that RoleMotion provides higher-quality
+            text–motion pairs than HumanML3D.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Two-stage Body & Hand Generation -->
+<section class="section" id="two-stage">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+
+        <h2 class="title is-3 has-text-centered">Two-stage Body &amp; Hand Generation</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            Whole-body generation needs to synthesize both <strong>body</strong> and <strong>hands</strong>.
+            In our setting, body motion dominates the text semantics, while hands are more dexterous but often near-idle and mainly matter in interaction.
+            This discrepancy makes a single unified generator suboptimal. We therefore adopt a <strong>two-stage</strong> pipeline based on StableMoFusion.
+          </p>
+
+          <ul>
+            <li><strong>Stage 1 (Body):</strong> generate body motion from text .</li>
+            <li><strong>Stage 2 (Hands):</strong> generate hand motion conditioned on the body. During training, we feed
+              <em>[GT body ⊕ noisy hands]</em> and add Gaussian noise to the body condition to reduce train–test mismatch.</li>
+            <li><strong>Inference:</strong> run Stage 1 to get body, then Stage 2 to synthesize hands, and finally merge them into the full motion.</li>
+          </ul>
+
+
+          <figure class="image">
+            <img src="./static/images/two-stage.png" alt="Two-stage body & hand generation pipeline.">
+          </figure>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Evaluation Protocol & RoleMotion Evaluator -->
+  <section class="section" id="evaluator">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+
+          <h2 class="title is-3 has-text-centered">
+            Evaluation
+          </h2>
+
+          <div class="content has-text-justified">
+
+            <!-- 1. 为什么要新 evaluator
+            <p>
+              Reliable evaluation is crucial for text-to-motion research.
+              Existing works typically reuse the small critic introduced in
+              Text2Motion, which is trained only on HumanML3D and struggles
+              to capture fine-grained semantics such as body state, side of
+              part and hand interactions.
+              To obtain more trustworthy scores on our whole-body dataset,
+              we build a <strong>strong text–motion evaluator</strong> and
+              establish a unified benchmark protocol on RoleMotion.
+            </p>-->
+
+            <!-- 2. Evaluator 结构简介
+            <h3 class="title is-5">RoleMotion Evaluator</h3>
+            <p>
+              Our evaluator follows the idea of retrieval-style critics used in
+              TMR and HumanTomato: we train a <em>motion encoder</em> and a
+              <em>text encoder</em> jointly, and discard the motion decoder.
+              The model is optimized with a contrastive
+              <strong>InfoNCE</strong> loss so that matching
+              text–motion pairs are close in the shared embedding space while
+              mismatched pairs are pushed apart.
+            </p>-->
+            <!--
+            <ul>
+              <li>
+                <strong>Text encoders.</strong>
+                We adopt <code>distilbert-base-uncased</code> and
+                <code>all-mpnet-base-v2</code> to extract token-level and
+                sentence-level features from our fine-grained text annotations.
+              </li>
+              <li>
+                <strong>Motion encoder.</strong>
+                A transformer-based encoder takes body or body+hand motion
+                sequences as input and produces a single embedding for each
+                motion clip.
+              </li>
+              <li>
+                <strong>Body-only &amp; body+hand variants.</strong>
+                We train <em>two</em> evaluators on RoleMotion:
+                one on body-only data and one on whole-body (body + hands)
+                data, allowing separate views when evaluating whole-body
+                synthesis.
+              </li>
+            </ul>
+            -->
+
+            <!--
+            <p>
+              As shown in our experiments, this evaluator consistently
+              outperforms the original Text2Motion critic on
+              <em>R-Precision of ground-truth motions</em>,
+              indicating a more faithful modeling of text–motion alignment.
+              Therefore, all quantitative results on RoleMotion
+              (FID, R-Precision and Diversity) reported in this page are
+              computed using our evaluator unless otherwise specified.
+            </p>
+
+            <hr>
+            -->
+
+
+            <!-- 3. Benchmark 协议：指标 + 基线
+            <h3 class="title is-5">Text-to-Motion Benchmark on RoleMotion</h3>-->
+            <!--
+            <p>
+              Built upon the RoleMotion evaluator, we establish a new
+              <strong>text-to-motion benchmark</strong> on our dataset.
+              The benchmark covers both <em>body-only</em> and
+              <em>whole-body (body + hands)</em> generation, and evaluates
+              models on the RoleMotion test set using the following metrics:
+            </p>
+            <ul>
+              <li>
+                <strong>FID &darr;</strong>:
+                Fr&eacute;chet Inception Distance between real and generated
+                motions in the evaluator embedding space.
+                Lower is better and indicates higher realism.
+              </li>
+              <li>
+                <strong>R-Precision@k &uarr;</strong>:
+                Given a text query, retrieve the ground-truth motion from
+                a candidate pool of motions (batch size 256) using the
+                evaluator; higher Top-1/2/3 scores mean better
+                text–motion correspondence.
+              </li>
+              <li>
+                <strong>Diversity &rarr;</strong>:
+                Average pairwise distance between generated motions,
+                reflecting the variability of synthesized samples.
+              </li>
+              <li>
+                <strong>Multi-modality &uarr;</strong>:
+                Distance between motions generated from the same text
+                under different noise seeds, measuring the diversity
+                conditioned on a fixed description.
+              </li>
+            </ul>
+
+            <p>
+              We benchmark a wide range of representative models, including
+              diffusion-based and VAE-based approaches:
+            </p>-->
+  <!--
+            <ul>
+              <li><strong>MDM</strong> &mdash; a transformer-based diffusion model.</li>
+              <li><strong>MotionDiffuse</strong> &mdash; a cross-modality
+                  linear transformer that directly predicts motion samples.</li>
+              <li><strong>MLD</strong> &mdash; Motion Latent Diffusion with
+                  a VAE + transformer operating in the latent space.</li>
+              <li><strong>StableMoFusion</strong> &mdash; a Conv1D U-Net with
+                  linear cross-attention, used as our strong body-motion
+                  backbone.</li>
+              <li><strong>TMR, MoMask, T2M-GPT</strong> and other recent
+                  retrieval / VQ-VAE based baselines.</li>
+            </ul>
+            -->
+            <!-- 4. 一个简单的示例结果表（具体数值可以之后补齐）
+            <p>
+              Below is a simplified example of quantitative results on the
+              <em>body-only</em> setting of RoleMotion to illustrate the
+              benchmark (please fill in the exact numbers from the paper
+              if desired):
+            </p>
+
+            <div class="table-container">
+
+            </div>
+
+            <p class="is-size-7 has-text-grey has-text-centered">
+              A unified evaluator allows us to fairly compare diverse models on
+              RoleMotion and reveals that diffusion-based methods such as
+              StableMoFusion achieve the best trade-off between fidelity,
+              diversity and text–motion alignment.
+            </p>
+            -->
+                                  <figure class="image">
+            <img src="static/images/evaluator.png"
+                 alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
+          </figure>
+
+                      <figure class="image">
+            <img src="static/images/experiments.png"
+                 alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
+          </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{peng2025rolemotionlargescaledatasetrobust,
+      title={RoleMotion: A Large-Scale Dataset towards Robust Scene-Specific Role-Playing Motion Synthesis with Fine-grained Descriptions},
+      author={Junran Peng and Yiheng Huang and Silei Shen and Zeji Wei and Jingwei Yang and Baojie Wang and Yonghao He and Chuanchen Luo and Man Zhang and Xucheng Yin and Wei Sui},
+      year={2025},
+      eprint={2512.01582},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2512.01582},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/pdf/2512.01582.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var sc_project=12351448;
+    var sc_invisible=1;
+    var sc_security="c676de4f";
+  </script>
+  <script type="text/javascript"
+  src="https://www.statcounter.com/counter/counter.js"
+  async></script>
+</body>
+</html>

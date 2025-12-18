@@ -1,0 +1,50 @@
+/* Make the role container flex */
+.role-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Make the video responsive */
+.role-video {
+  width: 100%;
+  height: auto;
+}
+
+/* Video-text container */
+.video-text-container {
+  margin-bottom: 15px;
+}
+
+/* Center the controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Button styling: small circle buttons */
+button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Add margin to text */
+.role-text {
+  font-size: 1rem;
+  margin-top: 10px;
+}

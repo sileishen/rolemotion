@@ -918,8 +918,6 @@
             HumanML3D, both quantitatively and qualitatively.
           </p>
 
-          <!-- ========= Qualitative Figure (Fig.3) ========= -->
-          <!-- 请先把论文里的 Fig.3 导出成一张图片，比如 static/images/hml3d_rolemotion_qualitative.png -->
           <figure class="image">
             <img src="static/images/fine_grained_v2_01.png"
                  alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
@@ -942,7 +940,7 @@
 
           <hr>
 
-          <!-- ========= Quantitative Table (Table 3) ========= -->
+
           <h3 class="title is-5 has-text-centered">
             Quantitative Alignment under a Unified Evaluator
           </h3>
@@ -1061,158 +1059,53 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column is-four-fifths">
-
           <h2 class="title is-3 has-text-centered">
-            Evaluation
+            Experiments
           </h2>
-
           <div class="content has-text-justified">
 
-            <!-- 1. 为什么要新 evaluator
-            <p>
-              Reliable evaluation is crucial for text-to-motion research.
-              Existing works typically reuse the small critic introduced in
-              Text2Motion, which is trained only on HumanML3D and struggles
-              to capture fine-grained semantics such as body state, side of
-              part and hand interactions.
-              To obtain more trustworthy scores on our whole-body dataset,
-              we build a <strong>strong text–motion evaluator</strong> and
-              establish a unified benchmark protocol on RoleMotion.
-            </p>-->
 
-            <!-- 2. Evaluator 结构简介
-            <h3 class="title is-5">RoleMotion Evaluator</h3>
-            <p>
-              Our evaluator follows the idea of retrieval-style critics used in
-              TMR and HumanTomato: we train a <em>motion encoder</em> and a
-              <em>text encoder</em> jointly, and discard the motion decoder.
-              The model is optimized with a contrastive
-              <strong>InfoNCE</strong> loss so that matching
-              text–motion pairs are close in the shared embedding space while
-              mismatched pairs are pushed apart.
-            </p>-->
-            <!--
-            <ul>
-              <li>
-                <strong>Text encoders.</strong>
-                We adopt <code>distilbert-base-uncased</code> and
-                <code>all-mpnet-base-v2</code> to extract token-level and
-                sentence-level features from our fine-grained text annotations.
-              </li>
-              <li>
-                <strong>Motion encoder.</strong>
-                A transformer-based encoder takes body or body+hand motion
-                sequences as input and produces a single embedding for each
-                motion clip.
-              </li>
-              <li>
-                <strong>Body-only &amp; body+hand variants.</strong>
-                We train <em>two</em> evaluators on RoleMotion:
-                one on body-only data and one on whole-body (body + hands)
-                data, allowing separate views when evaluating whole-body
-                synthesis.
-              </li>
-            </ul>
-            -->
-
-            <!--
-            <p>
-              As shown in our experiments, this evaluator consistently
-              outperforms the original Text2Motion critic on
-              <em>R-Precision of ground-truth motions</em>,
-              indicating a more faithful modeling of text–motion alignment.
-              Therefore, all quantitative results on RoleMotion
-              (FID, R-Precision and Diversity) reported in this page are
-              computed using our evaluator unless otherwise specified.
-            </p>
-
-            <hr>
-            -->
-
-
-            <!-- 3. Benchmark 协议：指标 + 基线
-            <h3 class="title is-5">Text-to-Motion Benchmark on RoleMotion</h3>-->
-            <!--
-            <p>
-              Built upon the RoleMotion evaluator, we establish a new
-              <strong>text-to-motion benchmark</strong> on our dataset.
-              The benchmark covers both <em>body-only</em> and
-              <em>whole-body (body + hands)</em> generation, and evaluates
-              models on the RoleMotion test set using the following metrics:
-            </p>
-            <ul>
-              <li>
-                <strong>FID &darr;</strong>:
-                Fr&eacute;chet Inception Distance between real and generated
-                motions in the evaluator embedding space.
-                Lower is better and indicates higher realism.
-              </li>
-              <li>
-                <strong>R-Precision@k &uarr;</strong>:
-                Given a text query, retrieve the ground-truth motion from
-                a candidate pool of motions (batch size 256) using the
-                evaluator; higher Top-1/2/3 scores mean better
-                text–motion correspondence.
-              </li>
-              <li>
-                <strong>Diversity &rarr;</strong>:
-                Average pairwise distance between generated motions,
-                reflecting the variability of synthesized samples.
-              </li>
-              <li>
-                <strong>Multi-modality &uarr;</strong>:
-                Distance between motions generated from the same text
-                under different noise seeds, measuring the diversity
-                conditioned on a fixed description.
-              </li>
-            </ul>
-
-            <p>
-              We benchmark a wide range of representative models, including
-              diffusion-based and VAE-based approaches:
-            </p>-->
-  <!--
-            <ul>
-              <li><strong>MDM</strong> &mdash; a transformer-based diffusion model.</li>
-              <li><strong>MotionDiffuse</strong> &mdash; a cross-modality
-                  linear transformer that directly predicts motion samples.</li>
-              <li><strong>MLD</strong> &mdash; Motion Latent Diffusion with
-                  a VAE + transformer operating in the latent space.</li>
-              <li><strong>StableMoFusion</strong> &mdash; a Conv1D U-Net with
-                  linear cross-attention, used as our strong body-motion
-                  backbone.</li>
-              <li><strong>TMR, MoMask, T2M-GPT</strong> and other recent
-                  retrieval / VQ-VAE based baselines.</li>
-            </ul>
-            -->
-            <!-- 4. 一个简单的示例结果表（具体数值可以之后补齐）
-            <p>
-              Below is a simplified example of quantitative results on the
-              <em>body-only</em> setting of RoleMotion to illustrate the
-              benchmark (please fill in the exact numbers from the paper
-              if desired):
-            </p>
-
-            <div class="table-container">
-
-            </div>
-
-            <p class="is-size-7 has-text-grey has-text-centered">
-              A unified evaluator allows us to fairly compare diverse models on
-              RoleMotion and reveals that diffusion-based methods such as
-              StableMoFusion achieve the best trade-off between fidelity,
-              diversity and text–motion alignment.
-            </p>
-            -->
-                                  <figure class="image">
-            <img src="static/images/evaluator.png"
-                 alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
+          <h3 class="title is-5">Evaluator Reliability</h3>
+          <p>
+            We compare our evaluator with the widely used Text2Motion critic using ground-truth R-Precision.
+            Our evaluator consistently achieves higher scores in both body-only and whole-body settings.
+          </p>
+          <figure class="image">
+            <img src="./static/images/tab2.png" alt="Table: R-Precision of ground-truth on RoleMotion under different evaluators.">
           </figure>
 
-                      <figure class="image">
-            <img src="static/images/experiments.png"
-                 alt="Qualitative comparison of models trained on HumanML3D and RoleMotion.">
-          </figure>
+
+
+          <h3 class="title is-5">Text-to-Motion Benchmark on RoleMotion</h3>
+          <p>
+            We benchmark representative generators on RoleMotion using our evaluator (FID, R-Precision, Diversity, Multi-modality).
+          </p>
+          <details open>
+            <summary><strong>Body-only</strong> generation —— <strong>Body track</strong> results</summary>
+            <figure class="image">
+              <img src="static/images/tab4.png" alt="Body-only benchmark results on RoleMotion.">
+            </figure>
+          </details>
+
+
+          <details open>
+            <summary><strong>Whole-body (body+hand)</strong> generation —— <strong>Body track</strong> results</summary>
+            <figure class="image">
+              <img src="static/images/tab5.png" alt="Whole-body benchmark results on RoleMotion.">
+            </figure>
+          </details>
+
+          <p style="margin-top: 0.75rem;">
+            <strong>Key insight:</strong> training body and hands together can hurt body quality; the <strong>two-stage</strong> scheme gives the best body-track results under joint training.
+          </p>
+
+          <details open>
+            <summary><strong>Whole-body (body+hand)</strong> generation —— <strong>Body track</strong> results</summary>
+            <figure class="image">
+              <img src="static/images/tab6.png" alt="Whole-body benchmark results on RoleMotion.">
+            </figure>
+          </details>
+
           </div>
         </div>
       </div>
@@ -1220,6 +1113,27 @@
   </section>
 
 
+<!-- Conclusion / Takeaways -->
+<section class="section" id="conclusion">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="box">
+        <h2 class="title is-3 has-text-centered">Conclusion</h2>
+
+        <div class="content has-text-justified">
+          <ul>
+            <li><strong>RoleMotion dataset.</strong> A large-scale, scene-specific role-playing motion dataset with high-quality mocap and <strong>fine-grained</strong> text annotations.</li>
+            <li><strong>Reliable benchmark.</strong> We build a stronger text–motion evaluator and establish a unified benchmark for fair comparison of text-to-motion methods.</li>
+            <li><strong>Body–hand interplay.</strong> Whole-body synthesis benefits from <strong>disentangling</strong> body and hand generation; we advocate <strong>separate training and evaluation</strong> for body-only and whole-body settings.</li>
+            <li><strong>Open challenge.</strong> Faithfully evaluating hand motion remains difficult, since it must align with <strong>both</strong> the text semantics and the generated body motion.</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 

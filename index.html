@@ -41,7 +41,7 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   <style>
-  /* 统计数据栏样式 */
+
     .stat-section {
       margin-top: 1rem;
       margin-bottom: 2rem;
@@ -55,17 +55,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-right: 1px solid #e5e5e5; /* 竖线分隔符 */
+      border-right: 1px solid #e5e5e5;
     }
 
-    /* 最后一个元素去掉右边框 */
+
     .stat-item:last-child {
       border-right: none;
     }
 
     .stat-icon {
       font-size: 2rem;
-      color: #3273dc; /* 主题蓝 */
+      color: #3273dc;
       margin-bottom: 0.5rem;
       opacity: 0.8;
     }
@@ -85,7 +85,7 @@
       color: #7a7a7a;
     }
 
-    /* 移动端适配：手机上取消竖线，改为下边距 */
+
     @media screen and (max-width: 768px) {
       .stat-item {
         border-right: none;
@@ -93,7 +93,7 @@
       }
     }
 
-  /* 数据采集策划部分的样式 */
+
     .planning-container {
       margin-top: 20px;
     }
@@ -131,18 +131,18 @@
       border-color: #3273dc;
     }
 
-    /* 层级卡片样式 */
+
     .role-card {
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       padding: 20px;
       height: 100%;
-      border-top: 4px solid #3273dc; /* 蓝色顶边 */
+      border-top: 4px solid #3273dc;
     }
 
     .doctor-card {
-      border-top-color: #00d1b2; /* 绿色顶边区分医生 */
+      border-top-color: #00d1b2;
     }
 
     .behavior-list {
@@ -181,26 +181,24 @@
       color: #ccc;
       margin: 10px 0;
     }
-    /* 轮播容器内容填满所在的列 */
+
     .carousel-content-wrapper {
       width: 100%;
       margin: 0 auto;
     }
 
-    /* 调整文字大小，因为并排显示空间小，文字不能太大 */
     .carousel-caption {
       font-size: 0.9rem;
       font-weight: bold;
-      min-height: 3.5em; /* 预留高度，防止文字换行导致抖动 */
+      min-height: 3.5em;
       margin-bottom: 5px;
-      padding: 0 5px;    /* 防止文字贴边 */
+      padding: 0 5px;
     }
 
-    /* 给每一列加点间距和边框，看起来更像独立的卡片 */
     .scene-column {
       padding: 10px;
       border-radius: 8px;
-      /* border: 1px solid #eee;  如果不想要边框可以去掉这行 */
+      /* border: 1px solid #eee;
     }
 
     /* 调整标题 */
@@ -383,7 +381,7 @@
             <span class="is-size-4 has-text-weight-bold">Fine-grained Description</span>
           </div>
 
-          <!-- 2. 连接元素 (Visual Connector) -->
+          <!-- 2.  -->
           <div class="container is-max-desktop">
             <div class="columns is-centered is-mobile" style="margin-bottom: -15px; margin-top: 5px;">
               <div class="column is-3 has-text-centered flow-connector">
@@ -401,7 +399,7 @@
             </div>
           </div>
 
-          <!-- 3. 统计数据看板 (Statistical Result) -->
+          <!-- 3.  (Statistical Result) -->
           <div class="container is-max-desktop stats-dashboard">
             <div class="columns is-mobile is-multiline is-centered">
               <div class="column is-3-desktop is-6-mobile stat-col">
@@ -512,13 +510,13 @@
 
            <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
             <span class="hierarchy-label">Step 3: Fine-grained Descriptions</span>
-            <!-- 描述 1: 对应身体检查 (X光片) -->
+            <!--  1:  -->
             <div class="desc-box" style="border-left-color: #00d1b2;">
               <span class="desc-label" style="color: #00d1b2;">Description (Body check) </span>
               “While sitting, pick up the X-ray with both hands and slide the fingers of your right hand over the X-ray.”
             </div>
 
-            <!-- 描述 2: 对应交流病情 (听诊器) -->
+            <!--  2:  -->
             <div class="desc-box" style="border-left-color: #00d1b2;">
               <span class="desc-label" style="color: #00d1b2;">Description (Ask about condition)</span>
               “Sitting, pick up the stethoscope with both hands,place it in your ear, and then piek up the head with your right hand.”
@@ -557,7 +555,7 @@
     </div>
 
       <div class="columns is-centered is-desktop">
-        <!-- ================= 第1列: Office ================= -->
+        <!-- ================= : Office ================= -->
         <div class="column is-3 scene-column">
           <h3 class="title scene-title has-text-centered">Office</h3>
           <div class="carousel results-carousel">
@@ -591,7 +589,7 @@
           </div>
         </div>
 
-        <!-- ================= 第2列: Kitchen ================= -->
+        <!-- ================= : Kitchen ================= -->
         <div class="column is-3 scene-column">
           <h3 class="title scene-title has-text-centered">Kitchen</h3>
           <div class="carousel results-carousel">
@@ -625,7 +623,7 @@
           </div>
         </div>
 
-        <!-- ================= 第3列: Doctor ================= -->
+        <!-- ================= Doctor ================= -->
         <div class="column is-3 scene-column">
           <h3 class="title scene-title has-text-centered">Medical</h3>
           <div class="carousel results-carousel">
@@ -659,7 +657,7 @@
           </div>
         </div>
 
-        <!-- ================= 第4列: Customer ================= -->
+        <!-- =================  Customer ================= -->
         <div class="column is-3 scene-column">
           <h3 class="title scene-title has-text-centered">Customer</h3>
           <div class="carousel results-carousel">
